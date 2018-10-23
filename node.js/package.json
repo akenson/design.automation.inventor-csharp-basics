@@ -1,0 +1,19 @@
+{
+  "name": "io-samples",
+  "repository": {
+    "type": "git",
+    "url": "git@git.autodesk.com:inventor/io-samples.git"
+  },
+  "version": "0.0.2",
+  "description": "Node version of the sample app",
+  "license": "MIT",
+  "main": "server.js",
+  "devDependencies": {
+    "eslint": "^5.2.0"
+  },
+  "dependencies": {
+    "delay": "^3.0.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
