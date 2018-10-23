@@ -127,16 +127,9 @@ namespace samplePlugin
                     }
                     LogTrace("Saved as " + fileName);
 
-                    // save an image
-                    SaveImageFromPart(Path.Combine(docDir, "Result.bmp"), doc as PartDocument);
                 }
                 else // Assembly. That's already validated in ChangeParameters
                 {
-                    //Generate drawing document with assembly
-                    var idwPath = Path.ChangeExtension(Path.Combine(docDir, doc.DisplayName), "idw");
-                    LogTrace($"Generate drawing document");
-                    SaveAsIDW(idwPath, doc);
-
                     // cannot ZIP opened assembly, so close it
                     // start HeartBeat around Save, it could be a long operation
                     using (new HeartBeat())
@@ -168,105 +161,7 @@ namespace samplePlugin
             }
         }
 
-        /// <summary>
-        /// Generate drawing document with input model document
-        /// </summary>
-        /// <param name="filePath">File path for the generated drawing document</param>
-        /// <param name="doc">The Inventor document.</param>
-        private void SaveAsIDW(string filePath, Document doc)
-        {
-            LogTrace("Create a new drawing document");
-            DrawingDocument drawDoc = (DrawingDocument)inventorApplication.Documents.Add(DocumentTypeEnum.kDrawingDocumentObject);
-            Inventor.Sheet sheet;
-
-            LogTrace("Get or create a new drawing sheet");
-            try
-            {
-                if (drawDoc.Sheets.Count > 0)
-                {
-                    sheet = drawDoc.Sheets[1];
-                    sheet.Size = DrawingSheetSizeEnum.kA2DrawingSheetSize;
-                }
-                else
-                {
-                    sheet = drawDoc.Sheets.Add(DrawingSheetSizeEnum.kA2DrawingSheetSize);
-                }
-
-                TransientGeometry oTG = inventorApplication.TransientGeometry;
-                Inventor.Point2d pt = oTG.CreatePoint2d(10, 10);
-
-                LogTrace("Create a base view");
-                Inventor.DrawingView dv = sheet.DrawingViews.AddBaseView((_Document)doc, pt, 1, ViewOrientationTypeEnum.kIsoTopLeftViewOrientation, DrawingViewStyleEnum.kShadedDrawingViewStyle, "", null, null);
-                LogTrace("Change scale of base drawing view");
-                dv.Scale = CalculateViewSize(sheet, dv);
-
-                LogTrace("Create projected view");
-                Inventor.Point2d pt2 = oTG.CreatePoint2d(dv.Position.X, dv.Position.Y + dv.Height * 1.2);
-                Inventor.DrawingView projView = sheet.DrawingViews.AddProjectedView(dv, pt2, DrawingViewStyleEnum.kShadedDrawingViewStyle);
-
-                Inventor.Point2d pt3 = oTG.CreatePoint2d(sheet.Width - 5, sheet.Height / 3);
-                LogTrace("Create part list");
-                Inventor.PartsList pl = sheet.PartsLists.Add(dv, pt3, PartsListLevelEnum.kPartsOnly);
-
-                Inventor.Point2d pt4 = oTG.CreatePoint2d(sheet.Width / 2, sheet.Height / 4);
-                LogTrace("Create Revision table");
-                Inventor.RevisionTable rtable = sheet.RevisionTables.Add(pt4);
-                rtable.ShowTitle = true;
-                rtable.Title = "Revision Table Test";
-                rtable.RevisionTableRows[1][1].Text = "Inventor IO";
-                rtable.RevisionTableRows[1][3].Text = "Test revision table in drawing";
-                rtable.RevisionTableRows[1][4].Text = "Autodesk";
-                LogTrace("Done:Create Revision table");
-
-                LogTrace($"Saving IDW {filePath}");
-                drawDoc.SaveAs(filePath, false);
-                drawDoc.Close();
-                LogTrace($"Saved IDW as {filePath}");
-            }
-            catch(Exception e)
-            {
-                drawDoc.Close();
-                LogError($"Generate IDW fails: {e.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Adjust drawing view scale according to the model size
-        /// </summary>
-        /// <param name="sheet">Drawing sheet</param>
-        /// <param name="dv">Drawing view in the sheet</param>
-        /// <returns></returns>
-        private double CalculateViewSize(Inventor.Sheet sheet, DrawingView dv)
-        {
-            double dvtemp = dv.Height > dv.Width ? dv.Height : dv.Width;
-            double compareBase = dv.Height > dv.Width ? sheet.Height : sheet.Width;
-
-            if (dvtemp > compareBase / 2)
-            {
-                dv.Scale = dv.Scale / 1.5;
-                return CalculateViewSize(sheet, dv);
-            }
-            else if (dvtemp<compareBase / 3)
-            {
-                dv.Scale = dv.Scale* 1.5;
-                return CalculateViewSize(sheet, dv);
-            }
-            else
-            {
-                return dv.Scale;
-            }
-        }
-
-        private void SaveImageFromPart(string filePath, PartDocument partDoc)
-        {
-            LogTrace($"Saving image {filePath}");
-            Camera cam = inventorApplication.TransientObjects.CreateCamera();
-            cam.SceneObject = partDoc.ComponentDefinition;
-            cam.ViewOrientationType = ViewOrientationTypeEnum.kIsoTopRightViewOrientation;
-            cam.ApplyWithoutTransition();
-            cam.SaveAsBitmap(filePath, 200, 200, Type.Missing, Type.Missing);
-            LogTrace($"Saved image as {filePath}");
-        }
+        
 
         /// <summary>
         /// First param "_1" should be the filename of the JSON file containing the parameters and values
