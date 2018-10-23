@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ApplicationPackage SchemaVersion="1.0" Version="1.0" ProductCode="{FAE1868B-18EE-4090-A676-535335C4D41A}" Name="samplePlugin" Description="sample Plugin" Author="Inventor IO Dev">
+<ApplicationPackage SchemaVersion="1.0" Version="1.0" ProductCode="{60CE7EF8-D0D7-45F3-9852-641A1D27BA0D}" Name="samplePlugin" Description="sample Plugin" Author="Inventor IO Dev">
     <CompanyDetails Name="Autodesk, Inc" Phone="415.555.5555" Url="www.autodesk.com" Email="noreply@autodesk.com" />
     <Components>
         <!-- For Inventor Engine, "Platform" attribute must be "Inventor" -->

@@ -24,7 +24,7 @@ using Inventor;
 
 namespace samplePlugin
 {
-    [Guid("FAE1868B-18EE-4090-A676-535335C4D41A")]
+    [Guid("60CE7EF8-D0D7-45F3-9852-641A1D27BA0D")]
     public class PluginServer : ApplicationAddInServer
     {
         // Inventor application object.
