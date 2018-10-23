@@ -4,16 +4,14 @@ const request = require('request');
 const path = require('path');
 const homedir = path.join(process.env.SystemDrive, (process.platform === 'win32') ? process.env.HOMEPATH : process.env.HOME);
 const documentsDir = path.join(homedir, 'Documents');
-const postKeys = ["key", "success_action_status", "success_action_redirect", "content-type", "policy", "x-amz-signature", "x-amz-credential",
-    "x-amz-algorithm", "x-amz-date", "x-amz-server-side-encryption", "x-amz-security-token"];
 
 module.exports = {
     // upload an app
     uploadAppBundle: function (formData, uploadUrl) {
         return new Promise(function (resolve, reject) {
             let formContent = {};
-            postKeys.forEach(key => {
-                formContent[key] = formData[key];
+            Object.entries(formData).forEach(([key, value]) => {
+                formContent[key] = value
             });
             formContent.file = fs.createReadStream('../Solution/Output/samplePlugin.Bundle.zip');
             request({
