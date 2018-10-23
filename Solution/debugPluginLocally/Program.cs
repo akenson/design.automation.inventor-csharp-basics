@@ -61,7 +61,7 @@ namespace debugPluginLocally
             }
             catch (IOException e)
             {
-                Console.WriteLine("The specified file is in use. It might be open by Inventor");
+                Console.WriteLine("The specified file is in use. It might be open by Inventor: " + e.Message);
                 return;
             }
 

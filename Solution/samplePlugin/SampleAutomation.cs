@@ -127,6 +127,9 @@ namespace samplePlugin
                     }
                     LogTrace("Saved as " + fileName);
 
+                    var stepFile = Path.Combine(docDir, "Result.step");
+                    ExportToSTEP((PartDocument) doc, stepFile);
+
                 }
                 else // Assembly. That's already validated in ChangeParameters
                 {
@@ -233,6 +236,48 @@ namespace samplePlugin
                 default:
                     throw new ApplicationException(string.Format("Unexpected document type ({0})", docType));
             }
+        }
+
+        public bool ExportToSTEP(PartDocument doc, string outputFileName)
+        {
+            TranslatorAddIn transl = null;
+            transl = (TranslatorAddIn)inventorApplication.ApplicationAddIns.ItemById["{90AF7F40-0C01-11D5-8E83-0010B541CD80}"];
+
+            // Translator: STEP Export -- {90AF7F40-0C01-11D5-8E83-0010B541CD80} 
+
+            if (transl == null)
+            {
+                Trace.TraceInformation("STEP translator was NOT available");
+                return false;
+            }
+            else
+            {
+                Trace.TraceInformation("STEP translator is available");
+            }
+
+            TranslationContext context = inventorApplication.TransientObjects.CreateTranslationContext();
+            NameValueMap options = inventorApplication.TransientObjects.CreateNameValueMap();
+            if (transl.HasSaveCopyAsOptions[doc, context, options])
+            {
+                Trace.TraceInformation("Setting STEP translator options");
+                options.Value["ApplicationProtocolType"] = 4;
+                options.Value["Author"] = String.Empty;
+                options.Value["Organization"] = String.Empty;
+                options.Value["Authorization"] = String.Empty;
+                options.Value["Description"] = String.Empty;
+                options.Value["export_fit_tolerance"] = 0.001; // cm
+                options.Value["IncludeSketches"] = true;
+            }
+            Trace.TraceInformation("Setting other STEP translator options");
+            context.Type = IOMechanismEnum.kFileBrowseIOMechanism; // ???
+            DataMedium data = inventorApplication.TransientObjects.CreateDataMedium();
+            data.FileName = outputFileName;
+
+            Trace.TraceInformation("Generating STEP output");
+            transl.SaveCopyAs(doc, context, options, data);
+            Trace.TraceInformation("STEP output complete");
+
+            return true;
         }
 
         /// <summary>
