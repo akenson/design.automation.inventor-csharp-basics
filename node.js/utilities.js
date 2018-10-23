@@ -15,7 +15,7 @@ module.exports = {
             postKeys.forEach(key => {
                 formContent[key] = formData[key];
             });
-            formContent.file = fs.createReadStream('../AppBundles/samplePlugin.Bundle.zip');
+            formContent.file = fs.createReadStream('../Solution/Output/samplePlugin.Bundle.zip');
             request({
                 method: 'POST',
                 url: uploadUrl,
