@@ -1,0 +1,6 @@
+C:\Users\alex\source\repos\InventorAssemblyPlugin\InventorAssemblyPlugin\bin\Debug\InventorAssemblyPlugin.addin
+C:\Users\alex\source\repos\InventorAssemblyPlugin\InventorAssemblyPlugin\bin\Debug\InventorAssemblyPlugin.dll
+C:\Users\alex\source\repos\InventorAssemblyPlugin\InventorAssemblyPlugin\bin\Debug\InventorAssemblyPlugin.pdb
+C:\Users\alex\source\repos\InventorAssemblyPlugin\InventorAssemblyPlugin\obj\Debug\InventorAssemblyPlugin.csproj.CoreCompileInputs.cache
+C:\Users\alex\source\repos\InventorAssemblyPlugin\InventorAssemblyPlugin\obj\Debug\InventorAssemblyPlugin.dll
+C:\Users\alex\source\repos\InventorAssemblyPlugin\InventorAssemblyPlugin\obj\Debug\InventorAssemblyPlugin.pdb

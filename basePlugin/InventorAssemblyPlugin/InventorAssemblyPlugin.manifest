@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity name="InventorAssemblyPlugin" version="1.0.0.0"></assemblyIdentity>
+  <clrClass clsid="{1F599719-CF7D-44FA-8C48-5B12C86A6668}" progid="InventorAssemblyPlugin.PluginServer" threadingModel="Both" name="InventorAssemblyPlugin.PluginServer"></clrClass>
+  <file name="InventorAssemblyPlugin.dll" hashalg="SHA1"></file>
+</assembly>

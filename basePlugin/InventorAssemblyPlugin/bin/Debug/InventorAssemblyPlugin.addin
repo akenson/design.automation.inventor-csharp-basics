@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Addin Type="Plugin">
+  <ClassId>{1F599719-CF7D-44FA-8C48-5B12C86A6668}</ClassId>
+  <ClientId>{1F599719-CF7D-44FA-8C48-5B12C86A6668}</ClientId>
+  <DisplayName>factoryfour assembly plugin</DisplayName>
+  <Description>factoryfour assembly plugin</Description>
+  <Assembly>InventorAssemblyPlugin.dll</Assembly>
+</Addin>
