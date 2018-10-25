@@ -7,13 +7,13 @@ const documentsDir = path.join(homedir, 'Documents');
 
 module.exports = {
     // upload an app
-    uploadAppBundle: function (formData, uploadUrl) {
+    uploadAppBundle: function (formData, uploadUrl, bundlePath) {
         return new Promise(function (resolve, reject) {
             let formContent = {};
             Object.entries(formData).forEach(([key, value]) => {
                 formContent[key] = value
             });
-            formContent.file = fs.createReadStream('../Solution/Output/samplePlugin.Bundle.zip');
+            formContent.file = fs.createReadStream(bundlePath);
             request({
                 method: 'POST',
                 url: uploadUrl,

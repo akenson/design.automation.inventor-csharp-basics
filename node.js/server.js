@@ -109,7 +109,7 @@ async function setupAppBundle() {
     }
 
     console.log(`Uploading zip file ${config.LocalAppPackage}...`);
-    await utilities.uploadAppBundle(uploadParams.formData, uploadUrl);
+    await utilities.uploadAppBundle(uploadParams.formData, uploadUrl, config.LocalAppPackage);
 }
 
 /**
@@ -135,6 +135,7 @@ async function setupActivity() {
     parameters[config.ReqInputArgName] = { verb: 'get' };
     parameters[config.ParamArgName] = { localName: config.ParamFile, verb: 'get' };
     parameters[config.OutputPartArgName] = { zip: false, ondemand: false, optional: true, localName: config.OutputPartFile, verb: 'post' };
+    parameters['STL'] = { zip: false, ondemand: false, optional: true, localName: 'Result.stl', verb: 'post' };
     parameters[config.OutputAssemblyArgName] = { zip: false, ondemand: false, optional: true, localName: config.OutputZipAssemblyFile, verb: 'post' };
     parameters[config.OutputImageArgName] = { zip: false, ondemand: false, optional: true, localName: config.OutputImageFile, verb: 'post' };
     if (!activityExists) {
@@ -174,6 +175,18 @@ async function createPartWorkItem() {
             'Content-type': 'application/octet-stream'
         }
     };
+    arguments['STL'] = {
+        url: `${config.ForgeDMBaseUrl}buckets/${config.OutputBucketId}/objects/Result.stl`,
+        verb: 'put',
+        headers: {
+            Authorization: `Bearer ${forgeDmClient.getToken()}`,
+            'Content-type': 'application/octet-stream'
+        }
+    };
+    arguments['onComplete'] = {
+        verb: 'post',
+        url: 'https://dev-api.factoryfour.com/rules/hooks/5bd0d81e17e9d720977de2e8/run'
+    };
     let workItemId = await forgeDaClient.postWorkItem(activityId, arguments);
     let result = await forgeDaClient.waitForWorkItem(workItemId);
     if (result.status !== 'success') {
@@ -186,6 +199,8 @@ async function createPartWorkItem() {
     await utilities.downloadToDocs(result.reportUrl, config.partReport);
     let outputDownloadUrl = await forgeDmClient.createSignedUrl(config.OutputBucketId, config.OutputPartFile);
     await utilities.downloadToDocs(outputDownloadUrl, config.OutputPartFile);
+    outputDownloadUrl = await forgeDmClient.createSignedUrl(config.OutputBucketId, 'Result.stl');
+    await utilities.downloadToDocs(outputDownloadUrl, 'Result.stl');
 }
 
 /**

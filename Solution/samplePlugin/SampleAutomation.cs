@@ -127,8 +127,8 @@ namespace samplePlugin
                     }
                     LogTrace("Saved as " + fileName);
 
-                    var stepFile = Path.Combine(docDir, "Result.step");
-                    ExportToSTEP((PartDocument) doc, stepFile);
+                    var stepFile = Path.Combine(docDir, "Result.stl");
+                    ExportToSTL((PartDocument) doc, stepFile);
 
                 }
                 else // Assembly. That's already validated in ChangeParameters
@@ -279,7 +279,42 @@ namespace samplePlugin
 
             return true;
         }
+        public bool ExportToSTL(PartDocument doc, string outputFileName)
+        {
+            TranslatorAddIn transl = null;
+            transl = (TranslatorAddIn)inventorApplication.ApplicationAddIns.ItemById["{533E9A98-FC3B-11D4-8E7E-0010B541CD80}"];
 
+            // Translator: STL Export -- {533E9A98-FC3B-11D4-8E7E-0010B541CD80} 
+
+
+            if (transl == null)
+            {
+                Trace.TraceInformation("STL translator was NOT available");
+                return false;
+            }
+            else
+            {
+                Trace.TraceInformation("STL translator is available");
+            }
+
+            TranslationContext context = inventorApplication.TransientObjects.CreateTranslationContext();
+            NameValueMap options = inventorApplication.TransientObjects.CreateNameValueMap();
+            if (transl.HasSaveCopyAsOptions[doc, context, options])
+            {
+                Trace.TraceInformation("Setting STL translator options");
+                options.Value["ExportUnits"] = 4; // Centimeters
+                options.Value["Resolution"] = 1; // Medium
+            }
+            Trace.TraceInformation("Setting other STL translator things");
+            context.Type = IOMechanismEnum.kFileBrowseIOMechanism; // ???
+            DataMedium data = inventorApplication.TransientObjects.CreateDataMedium();
+            data.FileName = outputFileName;
+
+            Trace.TraceInformation("Generating STL output");
+            transl.SaveCopyAs(doc, context, options, data);
+            Trace.TraceInformation("STL output complete");
+            return true;
+        }
         /// <summary>
         /// Write info on input data to log.
         /// </summary>

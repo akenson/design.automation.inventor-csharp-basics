@@ -77,7 +77,7 @@ namespace debugPluginLocally
             if (_Instance != null)
             {
                 Console.WriteLine("Closing all documents...");
-                _Instance.Documents.CloseAll(UnreferencedOnly: false);
+                //_Instance.Documents.CloseAll(UnreferencedOnly: false);
 
                 if (_CreatedByUs)
                 {

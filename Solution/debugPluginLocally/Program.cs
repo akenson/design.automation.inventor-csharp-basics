@@ -50,7 +50,7 @@ namespace debugPluginLocally
             string projectdir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
 
             // get box.ipt absolute path
-            string boxPath = System.IO.Path.Combine(projectdir, @"inputFiles\", "box.ipt");
+            string boxPath = System.IO.Path.Combine(projectdir, @"inputFiles\", "TypeO_Straight.ipt");
 
             string boxPathCopy = System.IO.Path.Combine(projectdir, @"inputFiles\", "boxcopy.ipt");
 
